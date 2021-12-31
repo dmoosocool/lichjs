@@ -1,0 +1,22 @@
+{
+  "name": "@lichjs/virtual-dom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "cross-env NODE_ENV=production rollup -c",
+    "build:watch": "cross-env NODE_ENV=development rollup -c -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.1.2",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.14.9",
+    "rollup": "^2.62.0",
+    "rollup-plugin-esbuild": "^4.8.2",
+    "typescript": "^4.5.4"
+  }
+}
