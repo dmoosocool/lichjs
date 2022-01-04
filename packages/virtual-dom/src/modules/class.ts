@@ -6,7 +6,7 @@
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/modules/class.ts
  */
-import type { VNode, VNodeData, Module } from '@lich/virtual-dom';
+import type { VNode, VNodeData, Module } from '@lichjs/virtual-dom';
 function updateClass(oldVnode: VNode, vnode: VNode): void {
   let cur: boolean;
   let name: string;

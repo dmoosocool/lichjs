@@ -6,7 +6,7 @@
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/modules/style.ts
  */
-import type { VNode, VNodeData, Module } from '@lich/virtual-dom';
+import type { VNode, VNodeData, Module } from '@lichjs/virtual-dom';
 
 // Bindig `requestAnimationFrame` like this fixes a bug in IE/Edge. See #360 and #409.
 const raf =

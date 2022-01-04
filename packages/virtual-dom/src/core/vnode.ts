@@ -6,7 +6,7 @@
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/core/vnode.ts
  */
-import type { VNode, VNodeData } from '@lich/virtual-dom';
+import type { VNode, VNodeData } from '@lichjs/virtual-dom';
 
 export function vnode(
   sel: string | undefined,

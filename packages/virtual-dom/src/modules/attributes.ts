@@ -7,7 +7,7 @@
  * @FilePath: /lich/packages/virtual-dom/src/modules/attributes.ts
  */
 
-import type { VNode, VNodeData, Module } from '@lich/virtual-dom';
+import type { VNode, VNodeData, Module } from '@lichjs/virtual-dom';
 
 const xlinkNS = 'http://www.w3.org/1999/xlink';
 const xmlNS = 'http://www.w3.org/XML/1998/namespace';

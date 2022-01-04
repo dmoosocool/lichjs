@@ -6,9 +6,9 @@
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/core/domapi/html.ts
  */
-// import type { DOMApi } from '@lich/virtual-dom/virtual-dom.d';
+// import type { DOMApi } from '@lichjs/virtual-dom/virtual-dom.d';
 
-import type { DOMApi } from '@lich/virtual-dom';
+import type { DOMApi } from '@lichjs/virtual-dom';
 
 export const htmlDomApi: DOMApi = {
   createElement: function (

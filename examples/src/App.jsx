@@ -2,19 +2,17 @@
  * @Author: DM
  * @Date: 2021-12-29 18:22:39
  * @LastEditors: DM
- * @LastEditTime: 2021-12-30 10:14:14
+ * @LastEditTime: 2022-01-04 13:13:32
  * @Descriptions:
- * @FilePath: /lich/src/App.jsx
+ * @FilePath: /lich/examples/src/App.jsx
  */
 
-import { jsx } from "snabbdom";
-import { Fragment } from './Fragment'
+import { jsx, Fragment } from "@lichjs/virtual-dom";
 
 const node = (
   <div>
-    <h1>hello</h1>
+    <h1 onClick={(e)=> console.log(e,'hello lich')}>hello</h1>
   </div>
 );
 
-console.log(node)
 export default node;

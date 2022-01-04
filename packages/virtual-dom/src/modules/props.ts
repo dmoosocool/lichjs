@@ -6,7 +6,7 @@
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/modules/props.ts
  */
-import { VNode, VNodeData, Module } from '@lich/virtual-dom';
+import { VNode, VNodeData, Module } from '@lichjs/virtual-dom';
 function updateProps(oldVnode: VNode, vnode: VNode): void {
   let key: string;
   let cur: any;

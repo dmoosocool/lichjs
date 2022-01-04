@@ -2,13 +2,18 @@
  * @Author: DM
  * @Date: 2021-12-31 20:01:07
  * @LastEditors: DM
- * @LastEditTime: 2022-01-04 09:09:12
+ * @LastEditTime: 2022-01-04 13:12:53
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/core/jsx.ts
  */
 
-import type { VNode, VNodeData, ArrayOrElement, Key } from '@lich/virtual-dom';
-import { vnode, h } from '@lich/virtual-dom';
+import type {
+  VNode,
+  VNodeData,
+  ArrayOrElement,
+  Key,
+} from '@lichjs/virtual-dom';
+import { vnode, h } from '@lichjs/virtual-dom';
 
 // See https://www.typescriptlang.org/docs/handbook/jsx.html#type-checking
 namespace JSXInternal {
@@ -93,6 +98,22 @@ export function Fragment(
   return isPlainText(flatChildren) ? plainText : normalVNode;
 }
 
+export function analysisEvent(data: VNodeData) {
+  if (!data) return data;
+  const keys = Object.keys(data);
+  const eventKeys = keys.filter(key => key.startsWith('on'));
+  // analysis to data.on
+  data.on = data.on || [];
+  eventKeys.map(event => {
+    const name = event.replace('on', '').toLocaleLowerCase();
+    data.on[name] = data[event];
+    // remove events data from data
+    delete data[event];
+  });
+
+  return data;
+}
+
 /**
  * jsx/tsx compatible factory function
  * see: https://www.typescriptlang.org/docs/handbook/jsx.html#factory-functions
@@ -102,6 +123,8 @@ export function jsx(
   data: VNodeData | null,
   ...children: JsxVNodeChildren[]
 ): VNode {
+  data = analysisEvent(data);
+
   const flatChildren = flattenAndFilter(children, []);
   if (typeof tag === 'function') {
     // tag is a function component
@@ -120,6 +143,6 @@ export function jsx(
   }
 }
 
-export namespace jsx {
-  export import JSX = JSXInternal; // eslint-disable-line @typescript-eslint/no-unused-vars
-}
+// export namespace jsx {
+//   export import JSX = JSXInternal; // eslint-disable-line @typescript-eslint/no-unused-vars
+// }

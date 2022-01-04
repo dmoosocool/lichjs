@@ -2,9 +2,9 @@
  * @Author: DM
  * @Date: 2021-12-29 18:21:41
  * @LastEditors: DM
- * @LastEditTime: 2021-12-30 10:14:36
+ * @LastEditTime: 2022-01-04 13:14:56
  * @Descriptions:
- * @FilePath: /lich/src/main.js
+ * @FilePath: /lich/examples/src/main.js
  */
 
 import {
@@ -16,9 +16,9 @@ import {
   vnode,
   toVNode,
   // patch,
-} from "snabbdom";
+} from '@lichjs/virtual-dom';
 
-import App from "./App";
+import App from './App';
 
 let diffVNode;
 const patch = init([classModule, styleModule, eventListenersModule]);
@@ -27,10 +27,8 @@ function render() {
   diffVNode = patch(diffVNode, App);
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  const container = document.getElementById("app");
-
+window.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('app');
   diffVNode = patch(toVNode(container), App);
-  console.log(diffVNode);
   render();
 });

@@ -9,8 +9,8 @@
 // import { Module } from './modules/module';
 // import { vnode } from './vnode';
 // import * as is from './is';
-import { htmlDomApi, isArray, isPrimitive, vnode } from '@lich/virtual-dom';
-import type { DOMApi, VNode, Module } from '@lich/virtual-dom';
+import { htmlDomApi, isArray, isPrimitive, vnode } from '@lichjs/virtual-dom';
+import type { DOMApi, VNode, Module } from '@lichjs/virtual-dom';
 
 type NonUndefined<T> = T extends undefined ? never : T;
 

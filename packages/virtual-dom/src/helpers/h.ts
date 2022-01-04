@@ -11,8 +11,8 @@ import type {
   VNodeData,
   VNodes,
   VNodeChildren,
-} from '@lich/virtual-dom';
-import { vnode, isArray, isPrimitive } from '@lich/virtual-dom';
+} from '@lichjs/virtual-dom';
+import { vnode, isArray, isPrimitive } from '@lichjs/virtual-dom';
 
 function addNS(
   data: any,

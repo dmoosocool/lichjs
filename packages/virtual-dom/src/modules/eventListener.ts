@@ -6,7 +6,7 @@
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/modules/eventListener.ts
  */
-import { VNode, VNodeData, Module, Listener } from '@lich/virtual-dom';
+import { VNode, VNodeData, Module, Listener } from '@lichjs/virtual-dom';
 
 type SomeListener<N extends keyof HTMLElementEventMap> =
   | Listener<HTMLElementEventMap[N]>

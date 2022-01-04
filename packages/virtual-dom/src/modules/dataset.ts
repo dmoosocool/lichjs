@@ -6,7 +6,7 @@
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/modules/dataset.ts
  */
-import { VNode, VNodeData, Module } from '@lich/virtual-dom';
+import { VNode, VNodeData, Module } from '@lichjs/virtual-dom';
 const CAPS_REGEX = /[A-Z]/g;
 
 function updateDataset(oldVnode: VNode, vnode: VNode): void {

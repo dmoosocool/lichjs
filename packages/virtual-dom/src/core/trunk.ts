@@ -6,8 +6,8 @@
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/core/trunk.ts
  */
-import type { VNode, VNodeData } from '@lich/virtual-dom';
-import { h } from '@lich/virtual-dom';
+import type { VNode, VNodeData } from '@lichjs/virtual-dom';
+import { h } from '@lichjs/virtual-dom';
 
 export interface ThunkData extends VNodeData {
   fn: () => VNode;

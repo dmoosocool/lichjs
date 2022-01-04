@@ -19,8 +19,8 @@
     "types": ["jest", "puppeteer", "node"],
     "rootDir": ".",
     "paths": {
-      "@lich/*": ["packages/*/src"],
-      "lich": ["packages/lich/src"]
+      "@lichjs/*": ["packages/*/src"],
+      "lichjs": ["packages/lich/src"]
     }
   },
 

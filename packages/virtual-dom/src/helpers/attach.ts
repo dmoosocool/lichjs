@@ -6,7 +6,7 @@
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/helpers/attach.ts
  */
-import type { VNode, VNodeWithAttachData, Hooks } from '@lich/virtual-dom';
+import type { VNode, VNodeWithAttachData, Hooks } from '@lichjs/virtual-dom';
 
 const attachHook = {
   pre: function pre(

@@ -6,8 +6,8 @@
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/helpers/toVNode.ts
  */
-import { vnode, htmlDomApi } from '@lich/virtual-dom';
-import type { DOMApi, VNode } from '@lich/virtual-dom';
+import { vnode, htmlDomApi } from '@lichjs/virtual-dom';
+import type { DOMApi, VNode } from '@lichjs/virtual-dom';
 
 // get real array from NamedNodeMap
 function getAttrs(map: NamedNodeMap) {
