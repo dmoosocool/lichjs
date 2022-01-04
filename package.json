@@ -5,7 +5,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "pnpm run build --filter=!@lich/lich"
+    "example:dev": "pnpm build && cd examples && pnpm dev",
+    "build": "pnpm build --filter=."
   },
   "keywords": [],
   "author": "",

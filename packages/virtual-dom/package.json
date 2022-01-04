@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
+  "types": "dist/global.d.ts",
   "scripts": {
     "build": "cross-env NODE_ENV=production rollup -c",
     "build:watch": "cross-env NODE_ENV=development rollup -c -w"

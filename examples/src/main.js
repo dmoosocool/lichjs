@@ -2,36 +2,12 @@
  * @Author: DM
  * @Date: 2021-12-29 18:21:41
  * @LastEditors: DM
- * @LastEditTime: 2022-01-04 14:04:29
+ * @LastEditTime: 2022-01-04 15:18:02
  * @Descriptions:
  * @FilePath: /lich/examples/src/main.js
  */
 
-import {
-  eventListenersModule,
-  styleModule,
-  classModule,
-  init,
-  h,
-  vnode,
-  toVNode,
-  // patch,
-} from '@lichjs/virtual-dom';
-
 import App from './App';
-import { jsx, Fragment } from '@lichjs/virtual-dom';
+import { createApp } from '@lichjs/lich';
 
-let diffVNode;
-const patch = init([classModule, styleModule, eventListenersModule]);
-
-function render() {
-  diffVNode = patch(diffVNode, App);
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('app');
-  diffVNode = patch(toVNode(container), App);
-
-  console.log(diffVNode);
-  render();
-});
+createApp(App).mount('#app');

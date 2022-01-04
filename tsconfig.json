@@ -20,7 +20,6 @@
     "rootDir": ".",
     "paths": {
       "@lichjs/*": ["packages/*/src"],
-      "lichjs": ["packages/lich/src"]
     }
   },
 
