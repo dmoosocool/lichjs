@@ -2,16 +2,20 @@
  * @Author: DM
  * @Date: 2021-12-29 18:22:39
  * @LastEditors: DM
- * @LastEditTime: 2022-01-04 13:13:32
+ * @LastEditTime: 2022-01-04 14:16:15
  * @Descriptions:
  * @FilePath: /lich/examples/src/App.jsx
  */
+const data = 'hello lich from vite~'
 
-import { jsx, Fragment } from "@lichjs/virtual-dom";
+function Title(props) {
+  const {className, text} = props;
+  return <h1 class={className} onClick={(e)=> console.log(e,'hello lich')}>{text}</h1>
+}
 
 const node = (
   <div>
-    <h1 onClick={(e)=> console.log(e,'hello lich')}>hello</h1>
+    <Title className={{a: true, b: false}} text={data} />
   </div>
 );
 
