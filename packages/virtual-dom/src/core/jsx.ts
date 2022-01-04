@@ -2,12 +2,12 @@
  * @Author: DM
  * @Date: 2021-12-31 20:01:07
  * @LastEditors: DM
- * @LastEditTime: 2021-12-31 20:03:25
+ * @LastEditTime: 2022-01-04 09:09:12
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/core/jsx.ts
  */
 
-import type { VNode, VNodeData, ArrayOrElement } from '@lich/virtual-dom';
+import type { VNode, VNodeData, ArrayOrElement, Key } from '@lich/virtual-dom';
 import { vnode, h } from '@lich/virtual-dom';
 
 // See https://www.typescriptlang.org/docs/handbook/jsx.html#type-checking
@@ -32,6 +32,12 @@ export type FunctionComponent = (
   props: { [prop: string]: any } | null,
   children?: VNode[],
 ) => VNode;
+
+export function isPlainText(nodes: VNode[]) {
+  return (
+    nodes.length === 1 && nodes[0].sel === undefined && nodes[0].text !== ''
+  );
+}
 
 function flattenAndFilter(
   children: JsxVNodeChildren[],
@@ -61,6 +67,30 @@ function flattenAndFilter(
     }
   }
   return flattened;
+}
+
+export function Fragment(
+  data: { key: Key } | null,
+  ...children: JsxVNodeChildren[]
+): VNode {
+  const flatChildren = flattenAndFilter(children, []);
+  const plainText = vnode(
+    undefined,
+    undefined,
+    undefined,
+    flatChildren[0].text,
+    undefined,
+  );
+
+  const normalVNode = vnode(
+    undefined,
+    data ?? undefined,
+    flatChildren,
+    undefined,
+    undefined,
+  );
+
+  return isPlainText(flatChildren) ? plainText : normalVNode;
 }
 
 /**
