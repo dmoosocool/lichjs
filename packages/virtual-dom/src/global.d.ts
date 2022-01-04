@@ -2,7 +2,7 @@
  * @Author: DM
  * @Date: 2021-12-31 17:55:57
  * @LastEditors: DM
- * @LastEditTime: 2021-12-31 20:12:33
+ * @LastEditTime: 2022-01-04 13:49:15
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/global.d.ts
  */
@@ -77,13 +77,22 @@ export type VNodeStyle = Record<string, string> & {
 
 export type Dataset = Record<string, string>;
 export type Listener<T> = (this: VNode, ev: T, vnode: VNode) => void;
-export type On = {
+
+export type HTMLEvents = {
   [N in keyof HTMLElementEventMap]?:
     | Listener<HTMLElementEventMap[N]>
     | Array<Listener<HTMLElementEventMap[N]>>;
-} & {
-  [event: string]: Listener<any> | Array<Listener<any>>;
 };
+// export type CustomerEvents = {
+//   [event: string]: Listener<Event> | Array<Listener<Event>>;
+// };
+
+export type CustomerEvents = Record<
+  string,
+  Listener<Event> | Listener<Event>[]
+>;
+
+export type On = HTMLEvents | CustomerEvents;
 
 export type Key = string | number | symbol;
 
@@ -102,7 +111,7 @@ export interface VNodeData {
   class?: Classes;
   style?: VNodeStyle;
   dataset?: Dataset;
-  on?: On;
+  on?: On | never[];
   attachData?: AttachData;
   hook?: Hooks;
   key?: Key;

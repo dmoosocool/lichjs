@@ -2,7 +2,7 @@
  * @Author: DM
  * @Date: 2021-12-29 18:21:41
  * @LastEditors: DM
- * @LastEditTime: 2022-01-04 13:14:56
+ * @LastEditTime: 2022-01-04 13:46:32
  * @Descriptions:
  * @FilePath: /lich/examples/src/main.js
  */
@@ -30,5 +30,7 @@ function render() {
 window.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('app');
   diffVNode = patch(toVNode(container), App);
+
+  console.log(diffVNode);
   render();
 });

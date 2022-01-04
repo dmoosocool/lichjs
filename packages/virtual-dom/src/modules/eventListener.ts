@@ -2,11 +2,12 @@
  * @Author: DM
  * @Date: 2021-12-31 19:42:23
  * @LastEditors: DM
- * @LastEditTime: 2021-12-31 19:43:42
+ * @LastEditTime: 2022-01-04 13:55:13
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/modules/eventListener.ts
  */
 import { VNode, VNodeData, Module, Listener } from '@lichjs/virtual-dom';
+import { CustomerEvents } from '../global';
 
 type SomeListener<N extends keyof HTMLElementEventMap> =
   | Listener<HTMLElementEventMap[N]>
@@ -30,11 +31,12 @@ function invokeHandler<N extends keyof HTMLElementEventMap>(
 
 function handleEvent(event: Event, vnode: VNode) {
   const name = event.type;
-  const on = (vnode.data as VNodeData)?.on;
-
-  // call event handler(s) if exists
-  if (on && on[name]) {
-    invokeHandler(on[name], vnode, event);
+  if (vnode && vnode.data) {
+    const on = vnode.data.on || [];
+    // call event handler(s) if exists
+    if (on && (on as CustomerEvents)[name]) {
+      invokeHandler((on as CustomerEvents)[name], vnode, event);
+    }
   }
 }
 
@@ -68,7 +70,7 @@ function updateEventListeners(oldVnode: VNode, vnode?: VNode): void {
     } else {
       for (name in oldOn) {
         // remove listener if existing listener removed
-        if (!on[name]) {
+        if (!(on as CustomerEvents)[name]) {
           oldElm.removeEventListener(name, oldListener, false);
         }
       }
@@ -92,7 +94,7 @@ function updateEventListeners(oldVnode: VNode, vnode?: VNode): void {
     } else {
       for (name in on) {
         // add listener if new listener added
-        if (!oldOn[name]) {
+        if (!(oldOn as CustomerEvents)[name]) {
           elm.addEventListener(name, listener, false);
         }
       }

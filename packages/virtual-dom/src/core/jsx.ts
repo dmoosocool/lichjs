@@ -2,7 +2,7 @@
  * @Author: DM
  * @Date: 2021-12-31 20:01:07
  * @LastEditors: DM
- * @LastEditTime: 2022-01-04 13:12:53
+ * @LastEditTime: 2022-01-04 13:56:13
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/core/jsx.ts
  */
@@ -11,6 +11,7 @@ import type {
   VNode,
   VNodeData,
   ArrayOrElement,
+  CustomerEvents,
   Key,
 } from '@lichjs/virtual-dom';
 import { vnode, h } from '@lichjs/virtual-dom';
@@ -103,10 +104,11 @@ export function analysisEvent(data: VNodeData) {
   const keys = Object.keys(data);
   const eventKeys = keys.filter(key => key.startsWith('on'));
   // analysis to data.on
-  data.on = data.on || [];
+
   eventKeys.map(event => {
     const name = event.replace('on', '').toLocaleLowerCase();
-    data.on[name] = data[event];
+    data.on === undefined && (data.on = []);
+    (data.on as CustomerEvents)[name] = data[event];
     // remove events data from data
     delete data[event];
   });
@@ -123,8 +125,7 @@ export function jsx(
   data: VNodeData | null,
   ...children: JsxVNodeChildren[]
 ): VNode {
-  data = analysisEvent(data);
-
+  data = analysisEvent(data || {});
   const flatChildren = flattenAndFilter(children, []);
   if (typeof tag === 'function') {
     // tag is a function component
