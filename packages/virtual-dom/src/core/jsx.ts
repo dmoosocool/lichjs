@@ -16,14 +16,6 @@ import type {
 } from '@lichjs/virtual-dom';
 import { vnode, h } from '@lichjs/virtual-dom';
 
-// See https://www.typescriptlang.org/docs/handbook/jsx.html#type-checking
-namespace JSXInternal {
-  export type Element = VNode;
-  export interface IntrinsicElements {
-    [elemName: string]: VNodeData;
-  }
-}
-
 // for conditional rendering we support boolean child element e.g cond && <tag />
 export type JsxVNodeChild =
   | VNode
@@ -35,7 +27,7 @@ export type JsxVNodeChild =
 export type JsxVNodeChildren = ArrayOrElement<JsxVNodeChild>;
 
 export type FunctionComponent = (
-  props: { [prop: string]: any } | null,
+  props: { [prop: string]: unknown } | null,
   children?: VNode[],
 ) => VNode;
 

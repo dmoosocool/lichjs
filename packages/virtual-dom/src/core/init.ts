@@ -114,7 +114,7 @@ export function init(
       const currentHook = module[hook];
       if (currentHook !== undefined) {
         //TODO: fix type
-        (cbs[hook] as any[]).push(currentHook);
+        (cbs[hook] as unknown[]).push(currentHook);
       }
     }
   }
@@ -301,7 +301,7 @@ export function init(
     let oldKeyToIdx: KeyToIndexMap | undefined;
     let idxInOld: number;
     let elmToMove: VNode;
-    let before: any;
+    let before: Node | null | undefined;
 
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
       if (oldStartVnode == null) {
@@ -370,7 +370,7 @@ export function init(
       before = newCh[newEndIdx + 1] == null ? null : newCh[newEndIdx + 1].elm;
       addVnodes(
         parentElm,
-        before,
+        before!,
         newCh,
         newStartIdx,
         newEndIdx,

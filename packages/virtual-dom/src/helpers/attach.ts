@@ -6,13 +6,10 @@
  * @Descriptions:
  * @FilePath: /lich/packages/virtual-dom/src/helpers/attach.ts
  */
-import type { VNode, VNodeWithAttachData, Hooks } from '@lichjs/virtual-dom';
+import type { VNode, VNodeData, Hooks } from '@lichjs/virtual-dom';
 
-const attachHook = {
-  pre: function pre(
-    vnode: VNodeWithAttachData,
-    newVnode: VNodeWithAttachData,
-  ): void {
+const attachHook: Hooks = {
+  pre: function pre(vnode: VNodeData, newVnode: VNodeData): void {
     const attachData = vnode.data.attachData;
     // Copy created placeholder and real element from old vnode
     newVnode.data.attachData.placeholder = attachData.placeholder;
@@ -20,7 +17,8 @@ const attachHook = {
     // Mount real element in vnode so the patch process operates on it
     vnode.elm = vnode.data.attachData.real;
   },
-  create: function create(_: any, vnode: VNodeWithAttachData): void {
+
+  create: function create(_: VNodeData, vnode: VNodeData): void {
     const real = vnode.elm;
     const attachData = vnode.data.attachData;
     const placeholder = document.createElement('span');
@@ -32,7 +30,12 @@ const attachHook = {
     attachData.placeholder = placeholder;
   },
 
-  destory: function destroy(vnode: VNodeWithAttachData): void {
+  post: function post(_: never, vnode: VNodeData): void {
+    // Mount dummy placeholder in vnode so potential reorders use it
+    vnode.elm = vnode.data.attachData.placeholder;
+  },
+
+  destroy: function destory(vnode: VNodeData): void {
     // Remove placeholder
     if (vnode.elm !== undefined) {
       (vnode.elm.parentNode as HTMLElement).removeChild(vnode.elm);
@@ -40,19 +43,13 @@ const attachHook = {
     // Remove real element from where it was inserted
     vnode.elm = vnode.data.attachData.real;
   },
-
-  post: function post(_: any, vnode: VNodeWithAttachData): void {
-    // Mount dummy placeholder in vnode so potential reorders use it
-    vnode.elm = vnode.data.attachData.placeholder;
-  },
 };
 
 export function attachTo(target: Element, vnode: VNode): VNode {
   if (vnode.data === undefined) vnode.data = {};
   if (vnode.data.hook === undefined) vnode.data.hook = {};
   const data = vnode.data;
-  let hook = vnode.data.hook;
   data.attachData = { target: target, placeholder: undefined, real: undefined };
-  hook = attachHook as unknown as Hooks;
+  vnode.data.hook = attachHook;
   return vnode;
 }

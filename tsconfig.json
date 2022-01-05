@@ -16,7 +16,7 @@
     "removeComments": false,
     "jsx": "preserve",
     "lib": ["esnext", "dom"],
-    "types": ["jest", "puppeteer", "node"],
+    "types": ["node"],
     "rootDir": ".",
     "paths": {
       "@lichjs/*": ["packages/*/src"],

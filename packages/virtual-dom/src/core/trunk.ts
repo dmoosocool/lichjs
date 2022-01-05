@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /*
  * @Author: DM
  * @Date: 2021-12-31 18:49:51
@@ -11,7 +13,7 @@ import { h } from '@lichjs/virtual-dom';
 
 export interface ThunkData extends VNodeData {
   fn: () => VNode;
-  args: any[];
+  args: unknown[];
 }
 
 export interface Thunk extends VNode {
@@ -19,8 +21,13 @@ export interface Thunk extends VNode {
 }
 
 export interface ThunkFn {
-  (sel: string, fn: (...args: any[]) => any, args: any[]): Thunk;
-  (sel: string, key: any, fn: (...args: any[]) => any, args: any[]): Thunk;
+  (sel: string, fn: (...args: unknown[]) => unknown, args: unknown[]): Thunk;
+  (
+    sel: string,
+    key: unknown,
+    fn: (...args: unknown[]) => unknown,
+    args: unknown[],
+  ): Thunk;
 }
 
 function copyToThunk(vnode: VNode, thunk: VNode): void {
@@ -37,8 +44,11 @@ function copyToThunk(vnode: VNode, thunk: VNode): void {
 
 function init(thunk: VNode): void {
   const cur = thunk.data as VNodeData;
-  const vnode = (cur.fn as any)(...cur.args!);
-  copyToThunk(vnode, thunk);
+
+  if (cur.fn && cur.args) {
+    const vnode = cur.fn(cur.args);
+    copyToThunk(vnode, thunk);
+  }
 }
 
 function prepatch(oldVnode: VNode, thunk: VNode): void {
@@ -47,13 +57,13 @@ function prepatch(oldVnode: VNode, thunk: VNode): void {
   const cur = thunk.data as VNodeData;
   const oldArgs = old.args;
   const args = cur.args;
-  if (old.fn !== cur.fn || (oldArgs as any).length !== (args as any).length) {
-    copyToThunk((cur.fn as any)(...args!), thunk);
+  if (old.fn !== cur.fn || oldArgs!.length !== args!.length) {
+    copyToThunk(cur.fn!(...args!), thunk);
     return;
   }
-  for (i = 0; i < (args as any).length; ++i) {
-    if ((oldArgs as any)[i] !== (args as any)[i]) {
-      copyToThunk((cur.fn as any)(...args!), thunk);
+  for (i = 0; i < args!.length; ++i) {
+    if (oldArgs![i] !== args![i]) {
+      copyToThunk(cur.fn!(...args!), thunk);
       return;
     }
   }

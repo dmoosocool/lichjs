@@ -12,7 +12,7 @@ import type { DOMApi } from '@lichjs/virtual-dom';
 
 export const htmlDomApi: DOMApi = {
   createElement: function (
-    tagName: any,
+    tagName: string,
     options?: ElementCreationOptions,
   ): HTMLElement {
     return document.createElement(tagName, options);

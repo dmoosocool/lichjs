@@ -11,11 +11,12 @@ import type {
   VNodeData,
   VNodes,
   VNodeChildren,
+  VNodeChildElement,
 } from '@lichjs/virtual-dom';
 import { vnode, isArray, isPrimitive } from '@lichjs/virtual-dom';
 
 function addNS(
-  data: any,
+  data: VNodeData,
   children: VNodes | undefined,
   sel: string | undefined,
 ): void {
@@ -30,29 +31,26 @@ function addNS(
   }
 }
 
-export function h(sel: string): VNode;
-export function h(sel: string, data: VNodeData | null): VNode;
-export function h(sel: string, children: VNodeChildren): VNode;
 export function h(
   sel: string,
-  data: VNodeData | null,
-  children: VNodeChildren,
-): VNode;
-export function h(sel: any, b?: any, c?: any): VNode {
-  let data: VNodeData = {};
-  let children: any;
-  let text: any;
-  let i: number;
+  b?: (VNodeData | null) | VNodeChildren,
+  c?: VNodeChildren,
+): VNode {
+  let data: VNodeData | null = null;
+  let children: VNodeChildElement[] = [];
+  let text = '';
+
   if (c !== undefined) {
     if (b !== null) {
-      data = b;
+      data = <VNodeData>b;
     }
+
     if (isArray(c)) {
       children = c;
     } else if (isPrimitive(c)) {
       text = c.toString();
     } else if (c && c.sel) {
-      children = [c];
+      children = [c as VNode];
     }
   } else if (b !== undefined && b !== null) {
     if (isArray(b)) {
@@ -60,32 +58,120 @@ export function h(sel: any, b?: any, c?: any): VNode {
     } else if (isPrimitive(b)) {
       text = b.toString();
     } else if (b && b.sel) {
-      children = [b];
+      children = [b as VNode];
     } else {
       data = b;
     }
   }
-  if (children !== undefined) {
-    for (i = 0; i < children.length; ++i) {
-      if (isPrimitive(children[i]))
-        children[i] = vnode(
+
+  if (isArray(children)) {
+    children.map(child => {
+      if (isPrimitive(child)) {
+        child = vnode(
           undefined,
           undefined,
           undefined,
-          children[i],
+          child.toString(),
           undefined,
         );
+      }
+      return child;
+    });
+  }
+
+  if (sel.startsWith('svg')) {
+    if (sel.length === 3 || ['.', '#'].includes(sel[4])) {
+      addNS(data!, children as VNodes, sel);
     }
   }
-  if (
-    sel[0] === 's' &&
-    sel[1] === 'v' &&
-    sel[2] === 'g' &&
-    (sel.length === 3 || sel[3] === '.' || sel[3] === '#')
-  ) {
-    addNS(data, children, sel);
-  }
-  return vnode(sel, data, children, text, undefined);
+
+  return vnode(
+    sel,
+    data!,
+    children as unknown as (string | VNode)[],
+    text,
+    undefined,
+  );
+
+  // if (b !== undefined && b !== null && c !== undefined) {
+  //   data = <VNodeData>b;
+  // }
+
+  // if (c !== undefined && Array.isArray(c)) {
+  //   children = c;
+  // }
+
+  // if (c !== undefined && (typeof c === 'string' || typeof c === 'number')) {
+  //   text = c.toString();
+  // }
+
+  // if (c !== undefined && (c as VNode).sel) {
+  //   children = [c as VNode];
+  // }
+
+  // if (b !== undefined && b !== null && Array.isArray(b)) {
+  //   children = b;
+  // }
+
+  // if (b !== undefined && (typeof b === 'string' || typeof b === 'number')) {
+  //   text = b.toString();
+  // }
+
+  // if (b !== undefined && (b as VNode).sel) {
+  //   children = [b as VNode];
+  // }
+
+  // if (b !== undefined && b !== null) {
+  //   data = b;
+  // }
+
+  // let data: VNodeData = {};
+  // let children: any;
+  // let text: any;
+  // let i: number;
+  // if (c !== undefined) {
+  //   if (b !== null) {
+  //     data = b;
+  //   }
+  //   if (isArray(c)) {
+  //     children = c;
+  //   } else if (isPrimitive(c)) {
+  //     text = c.toString();
+  //   } else if (c && c.sel) {
+  //     children = [c];
+  //   }
+  // } else if (b !== undefined && b !== null) {
+  //   if (isArray(b)) {
+  //     children = b;
+  //   } else if (isPrimitive(b)) {
+  //     text = b.toString();
+  //   } else if (b && b.sel) {
+  //     children = [b];
+  //   } else {
+  //     data = b;
+  //   }
+  // }
+  // if (children !== undefined) {
+  //   for (i = 0; i < children.length; ++i) {
+  //     if (isPrimitive(children[i]))
+  //       children[i] = vnode(
+  //         undefined,
+  //         undefined,
+  //         undefined,
+  //         children[i],
+  //         undefined,
+  //       );
+  //   }
+  // }
+  // if (
+  //   sel[0] === 's' &&
+  //   sel[1] === 'v' &&
+  //   sel[2] === 'g' &&
+  //   (sel.length === 3 || sel[3] === '.' || sel[3] === '#')
+  // ) {
+  //   addNS(data, children, sel);
+  // }
+  // return vnode(sel, data, children, text, undefined);
 }
 
 /**

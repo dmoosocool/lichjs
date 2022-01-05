@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /*
  * @Author: DM
  * @Date: 2021-12-31 17:55:57
@@ -7,7 +8,7 @@
  * @FilePath: /lich/packages/virtual-dom/src/global.d.ts
  */
 
-export type PreHook = () => any;
+export type PreHook = (...args: any[]) => any;
 export type InitHook = (vNode: VNode) => any;
 export type CreateHook = (emptyVNode: VNode, vNode: VNode) => any;
 export type InsertHook = (vNode: VNode) => any;
@@ -16,7 +17,7 @@ export type UpdateHook = (oldVNode: VNode, vNode: VNode) => any;
 export type PostPatchHook = (oldVNode: VNode, vNode: VNode) => any;
 export type DestroyHook = (vNode: VNode) => any;
 export type RemoveHook = (vNode: VNode, removeCallback: () => void) => any;
-export type PostHook = () => any;
+export type PostHook = (...args: any[]) => any;
 
 export interface VNodeDataWithAttach extends VNodeData {
   attachData: AttachData;
@@ -63,8 +64,8 @@ export type VNodeChildElement =
   | VNode
   | string
   | number
-  | String
-  | Number
+  | string
+  | number
   | undefined
   | null;
 export type ArrayOrElement<T> = T | T[];
@@ -116,7 +117,7 @@ export interface VNodeData {
   hook?: Hooks;
   key?: Key;
   ns?: string; // for SVGs
-  fn?: () => VNode; // for thunks
+  fn?: (...args: any[]) => VNode; // for thunks
   args?: any[]; // for thunks
   is?: string; // for custom elements v1
   [key: string]: any; // for any other 3rd party module
@@ -152,3 +153,20 @@ export interface DOMApi {
   isComment: (node: Node) => node is Comment;
   isDocumentFragment: (node: Node) => node is DocumentFragment;
 }
+
+// See https://www.typescriptlang.org/docs/handbook/jsx.html#type-checking
+declare namespace JSXInternal {
+  export type Element = VNode;
+  export interface IntrinsicElements {
+    [elemName: string]: VNodeData;
+  }
+}
+
+export function h(sel: string): VNode;
+export function h(sel: string, data: VNodeData | null): VNode;
+export function h(sel: string, children: VNodeChildren): VNode;
+export function h(
+  sel: string,
+  data: VNodeData | null,
+  children: VNodeChildren,
+): VNode;

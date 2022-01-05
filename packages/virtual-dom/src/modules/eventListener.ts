@@ -11,16 +11,16 @@ import { CustomerEvents } from '../global';
 
 type SomeListener<N extends keyof HTMLElementEventMap> =
   | Listener<HTMLElementEventMap[N]>
-  | Listener<any>;
+  | Listener<unknown>;
 
 function invokeHandler<N extends keyof HTMLElementEventMap>(
   handler: SomeListener<N> | Array<SomeListener<N>>,
   vnode: VNode,
   event?: Event,
 ): void {
-  if (typeof handler === 'function') {
+  if (typeof handler === 'function' && event !== undefined) {
     // call function handler
-    (handler as Function).call(vnode, event, vnode);
+    (handler as (event: Event, vnode: VNode) => void).call(vnode, event, vnode);
   } else if (typeof handler === 'object') {
     // call multiple handlers
     for (let i = 0; i < handler.length; i++) {
@@ -42,6 +42,7 @@ function handleEvent(event: Event, vnode: VNode) {
 
 function createListener() {
   return function handler(event: Event) {
+    // @TODO: what hell of handler?
     handleEvent(event, (handler as any).vnode);
   };
 }
