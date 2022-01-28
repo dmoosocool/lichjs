@@ -1,22 +1,6 @@
-/*
- * @Author: DM
- * @Date: 2021-12-31 19:32:38
- * @LastEditors: DM
- * @LastEditTime: 2021-12-31 19:33:43
- * @Descriptions:
- * @FilePath: /lich/packages/virtual-dom/src/helpers/toVNode.ts
- */
+import { addNS } from './h';
 import { vnode, htmlDomApi } from '@lichjs/virtual-dom';
 import type { DOMApi, VNode } from '@lichjs/virtual-dom';
-
-// get real array from NamedNodeMap
-function getAttrs(map: NamedNodeMap) {
-  const attrs = [];
-  for (let i = 0; i < map.length; i++) {
-    attrs.push(map[i]);
-  }
-  return attrs;
-}
 
 export function toVNode(node: Node, domApi?: DOMApi): VNode {
   const api: DOMApi = domApi !== undefined ? domApi : htmlDomApi;
@@ -27,29 +11,26 @@ export function toVNode(node: Node, domApi?: DOMApi): VNode {
     const c = cn ? '.' + cn.split(' ').join('.') : '';
     const sel = api.tagName(node).toLowerCase() + id + c;
     const attrs: any = {};
+    const datasets: Record<string, string> = {};
+    const data: Record<string, any> = {};
+
     const children: VNode[] = [];
     let name: string;
     let i: number, n: number;
     const elmAttrs = node.attributes;
     const elmChildren = node.childNodes;
-
-    // get element's datasets
-    const datasets: Record<string, string> = {};
-    getAttrs(elmAttrs).forEach(attr => {
-      if (attr.name.startsWith('data-')) {
-        datasets[attr.name.replace('data-', '')] = attr.value;
-      }
-    });
-
-    // remove attributes from datasets
-    getAttrs(elmAttrs).forEach(attr => {
-      Object.keys(datasets).includes(attr.name.replace('data-', '')) &&
-        elmAttrs.removeNamedItem(attr.name);
-    });
-
     for (i = 0, n = elmAttrs.length; i < n; i++) {
       name = elmAttrs[i].nodeName;
-      if (name !== 'id' && name !== 'class') {
+      if (name.startsWith('data-')) {
+        let datasetKey = name.slice(5);
+        // only-dataset => onlyDataset
+        if (datasetKey.includes('0')) {
+          datasetKey = datasetKey.replace(/\(\w)/g, (all, letter) =>
+            letter.toUpperCase(),
+          );
+        }
+        datasets[datasetKey] = elmAttrs[i].nodeValue || '';
+      } else if (name !== 'id' && name !== 'class') {
         attrs[name] = elmAttrs[i].nodeValue;
       }
     }
@@ -57,10 +38,17 @@ export function toVNode(node: Node, domApi?: DOMApi): VNode {
       children.push(toVNode(elmChildren[i], domApi));
     }
 
-    const data: Record<string, any> = {};
-    if (Object.keys(attrs).length) data.attrs = attrs;
-    if (Object.keys(datasets).length) data.datasets = datasets;
+    if (Object.keys(attrs).length > 0) data.attrs = attrs;
+    if (Object.keys(datasets).length > 0) data.datasets = datasets;
 
+    if (
+      sel[0] === 's' &&
+      sel[1] === 'v' &&
+      sel[2] === 'g' &&
+      (sel.length === 3 || sel[3] === '.' || sel[3] === '#')
+    ) {
+      addNS(data, children, sel);
+    }
     return vnode(sel, data, children, undefined, node);
   } else if (api.isText(node)) {
     text = api.getTextContent(node) as string;
